@@ -119,34 +119,32 @@ if not st.session_state.finished:
     st.write(q["question"])
     options = q["options"]
     answered = st.session_state.user_answers[st.session_state.current] is not None
-    # Show previous answer status
     user = st.session_state.user_answers[st.session_state.current]
+    # Show answer status and correct answer for this question if answered
     if user is not None:
         if user == q["answer"]:
-            st.markdown("<span style='color:#28a745;font-size:1.2em;font-weight:bold;'>Your previous answer was CORRECT</span>", unsafe_allow_html=True)
+            st.markdown("<h2 style='color:green;'>CORRECT</h2>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:#28a745;font-size:1.1em;'>Correct answer: {options[q['answer']]}</span>", unsafe_allow_html=True)
         else:
-            st.markdown("<span style='color:#dc3545;font-size:1.2em;font-weight:bold;'>Your previous answer was INCORRECT</span>", unsafe_allow_html=True)
-    # Show options as big buttons
+            st.markdown("<h2 style='color:red;'>INCORRECT</h2>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:#dc3545;font-size:1.1em;'>Correct answer: {options[q['answer']]}</span>", unsafe_allow_html=True)
+        explanation = q.get('explanation', '')
+        if explanation:
+            st.info(explanation)
+    # Show options as big buttons for this question
     for i, opt in enumerate(options):
         btn_key = f"option_{st.session_state.current}_{i}"
         if answered:
-            # Show which was selected, and disable all
+            symbol = ""
             if st.session_state.user_answers[st.session_state.current] == i:
-                st.button(f"{chr(65+i)}. {opt}", key=btn_key, disabled=True, use_container_width=True)
-            else:
-                st.button(f"{chr(65+i)}. {opt}", key=btn_key, disabled=True, use_container_width=True)
+                if user == q["answer"]:
+                    symbol = " ✓"
+                else:
+                    symbol = " ✗"
+            st.button(f"{chr(65+i)}. {opt}{symbol}", key=btn_key, disabled=True, use_container_width=True)
         else:
             if st.button(f"{chr(65+i)}. {opt}", key=btn_key, use_container_width=True):
                 select_option(i)
-    # Feedback
-    if st.session_state.show_feedback:
-        if st.session_state.last_correct:
-            st.markdown("<h2 style='color:green;'>CORRECT</h2>", unsafe_allow_html=True)
-        else:
-            st.markdown("<h2 style='color:red;'>INCORRECT</h2>", unsafe_allow_html=True)
-            st.write(f"Correct answer: {options[q['answer']]}")
-        if st.session_state.last_explanation:
-            st.info(st.session_state.last_explanation)
     # Navigation
     col1, col2, col3 = st.columns([1,2,1])
     with col1:
