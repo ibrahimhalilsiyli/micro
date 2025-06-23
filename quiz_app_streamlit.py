@@ -61,7 +61,7 @@ QUESTIONS = [
 ]
 
 st.title("Microprocessor Quiz)
-     st.title("Double click to see the answer")
+     
 
 if 'current' not in st.session_state:
     st.session_state.current = 0
