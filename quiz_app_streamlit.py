@@ -60,7 +60,7 @@ QUESTIONS = [
     {"question": "What is the main function of the Stack Pointer (SP)?", "options": ["Points to the last stack address used", "Stores intermediate results", "Tracks the next instruction", "Acts as a buffer for data"], "answer": 0}
 ]
 
-st.title("Computer Architecture Quiz")
+st.title("Microprocessor Quiz  (Double click to see the answer")
 
 if 'current' not in st.session_state:
     st.session_state.current = 0
